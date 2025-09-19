@@ -1,0 +1,775 @@
+<?xml version="1.0"?><artefact xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="artefact.xsd" name="Mermaid Diagram" slug="mermaid-diagram" type="code-package" schemaVersion="2">
+  <file path="readme.txt">
+    <description>This file contains the readme information for the block. It is used to provide information about the block, its usage, and any other relevant details.</description>
+    <content><![CDATA[
+=== Mermaid Diagram ===
+
+Contributors:      WordPress Telex
+Tags:              block, diagram, mermaid, flowchart, visualization
+Tested up to:      6.8
+Stable tag:        0.1.0
+License:           GPLv2 or later
+License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+
+Create beautiful diagrams and flowcharts using Mermaid syntax directly in your WordPress posts and pages.
+
+== Description ==
+
+The Mermaid Diagram block allows you to create professional-looking diagrams, flowcharts, sequence diagrams, Gantt charts, and more using simple text-based Mermaid syntax. Perfect for technical documentation, process flows, system architectures, and educational content.
+
+**Features:**
+* Support for all Mermaid diagram types (flowcharts, sequence diagrams, class diagrams, state diagrams, Gantt charts, pie charts, and more)
+* Live preview in the block editor
+* Syntax highlighting for better code readability
+* Responsive diagrams that work on all devices
+* Clean, professional rendering using the latest Mermaid.js library
+* Easy-to-use interface with helpful examples
+
+**Supported Diagram Types:**
+* Flowcharts and graphs
+* Sequence diagrams
+* Class diagrams
+* State diagrams
+* Entity relationship diagrams
+* User journey diagrams
+* Gantt charts
+* Pie charts
+* Git graphs
+* And many more!
+
+== Installation ==
+
+1. Upload the plugin files to the `/wp-content/plugins/mermaid-diagram` directory, or install the plugin through the WordPress plugins screen directly.
+2. Activate the plugin through the 'Plugins' screen in WordPress
+3. Use the Mermaid Diagram block in the Gutenberg editor
+4. Start creating beautiful diagrams with simple text syntax!
+
+== Frequently Asked Questions ==
+
+= What is Mermaid? =
+
+Mermaid is a JavaScript-based diagramming and charting tool that uses Markdown-inspired text definitions to create diagrams dynamically. It's widely used in documentation and technical writing.
+
+= Do I need to know programming to use this? =
+
+No! Mermaid uses simple, human-readable syntax. For example, to create a flowchart:
+```
+graph TD
+    A[Start] --> B{Is it?}
+    B -->|Yes| C[OK]
+    B -->|No| D[End]
+```
+
+= Can I customize the appearance of diagrams? =
+
+Yes! You can use Mermaid's theming system and custom styling within your diagram code to control colors, fonts, and other visual aspects.
+
+= Are the diagrams responsive? =
+
+Yes, all diagrams are fully responsive and will adapt to different screen sizes automatically.
+
+== Screenshots ==
+
+1. Adding a Mermaid diagram block in the Gutenberg editor
+2. Live preview of a flowchart diagram in the editor
+3. Beautiful rendered diagram on the frontend
+4. Example of a sequence diagram
+
+== Changelog ==
+
+= 0.1.0 =
+* Initial release
+* Support for all Mermaid diagram types
+* Live preview in editor
+* Syntax highlighting
+* Responsive diagram rendering
+
+== Examples ==
+
+Here are some quick examples to get you started:
+
+**Simple Flowchart:**
+```
+graph TD
+    A[Christmas] -->|Get money| B(Go shopping)
+    B --> C{Let me think}
+    C -->|One| D[Laptop]
+    C -->|Two| E[iPhone]
+    C -->|Three| F[fa:fa-car Car]
+```
+
+**Sequence Diagram:**
+```
+sequenceDiagram
+    Alice->>Bob: Hello Bob, how are you?
+    Bob-->>John: How about you John?
+    Bob--x Alice: I am good thanks!
+    Bob-x John: I am good thanks!
+```
+
+**Pie Chart:**
+```
+pie title Pets adopted by volunteers
+    "Dogs" : 386
+    "Cats" : 85
+    "Rats" : 15
+```
+]]></content>
+  </file>
+  <file path="mermaid-diagram.php">
+    <description>This file contains the block registration code in the form of a single block plugin. Any other plugin related functionality should be added to this file. All block rendering functionality should go to the `render.php` file.</description>
+    <content><![CDATA[<?php
+/**
+ * Plugin Name:       Mermaid Diagram
+ * Description:       Create beautiful diagrams and flowcharts using Mermaid syntax directly in your WordPress posts and pages.
+ * Version:           0.1.0
+ * Requires at least: 6.1
+ * Requires PHP:      7.0
+ * Author:            WordPress Telex
+ * License:           GPLv2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       mermaid-diagram-block-wp
+ *
+ * @package MermaidDiagram
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+/**
+ * Registers the block using the metadata loaded from the `block.json` file.
+ * Behind the scenes, it registers also all assets so they can be enqueued
+ * through the block editor in the corresponding context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/register_block_type/
+ */
+function mermaid_diagram_block_init() {
+	register_block_type( __DIR__ . '/build/' );
+}
+add_action( 'init', 'mermaid_diagram_block_init' );
+
+/**
+ * Enqueue Mermaid.js library on pages that contain the block
+ */
+function mermaid_diagram_enqueue_scripts() {
+	if ( has_block( 'telex/block-mermaid-diagram' ) ) {
+		wp_enqueue_script(
+			'mermaid',
+			'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js',
+			array(),
+			'10.6.1',
+			true
+		);
+	}
+}
+add_action( 'wp_enqueue_scripts', 'mermaid_diagram_enqueue_scripts' );
+]]></content>
+  </file>
+  <file path="src/block.json">
+    <description>This file contains metadata about the block including its name, title, category, icon, and other properties. The icon is a WordPress Dashicon name (e.g., "admin-post", "format-aside", "admin-page"). Do not use any icon that's not in the list under any circustamce. These are the only slugs available:
+	
+	menu menu-alt menu-alt2 menu-alt3 admin-site admin-site-alt admin-site-alt2 admin-site-alt3 dashboard admin-post admin-media admin-links admin-page admin-comments admin-appearance admin-plugins plugins-checked admin-users admin-tools admin-settings admin-network admin-home admin-generic admin-collapse filter admin-customizer admin-multisite welcome-write-blog welcome-add-page welcome-view-site welcome-widgets-menus welcome-comments welcome-learn-more format-aside format-image format-gallery format-video format-status format-quote format-chat format-audio camera camera-alt images-alt images-alt2 video-alt video-alt2 video-alt3 media-archive media-audio media-code media-default media-document media-interactive media-spreadsheet media-text media-video playlist-audio playlist-video controls-play controls-pause controls-forward controls-skipforward controls-back controls-skipback controls-repeat controls-volumeon controls-volumeoff image-crop image-rotate image-rotate-left image-rotate-right image-flip-vertical image-flip-horizontal image-filter undo redo database-add database database-export database-import database-remove database-view align-full-width align-pull-left align-pull-right align-wide block-default button cloud-saved cloud-upload columns cover-image ellipsis embed-audio embed-generic embed-photo embed-post embed-video exit heading html info-outline insert insert-after insert-before remove saved shortcode table-col-after table-col-before table-col-delete table-row-after table-row-before table-row-delete editor-bold editor-italic editor-ul editor-ol editor-ol-rtl editor-quote editor-alignleft editor-aligncenter editor-alignright editor-insertmore editor-spellcheck editor-expand editor-contract editor-kitchensink editor-underline editor-justify editor-textcolor editor-paste-word editor-paste-text editor-removeformatting editor-video editor-customchar editor-outdent editor-indent editor-help editor-strikethrough editor-unlink editor-rtl editor-ltr editor-break editor-code editor-paragraph editor-table align-left align-right align-center align-none lock unlock calendar calendar-alt visibility hidden post-status edit trash sticky external arrow-up arrow-down arrow-right arrow-left arrow-up-alt arrow-down-alt arrow-right-alt arrow-left-alt arrow-up-alt2 arrow-down-alt2 arrow-right-alt2 arrow-left-alt2 sort leftright randomize list-view excerpt-view grid-view move share share-alt share-alt2 rss email email-alt email-alt2 networking amazon facebook facebook-alt google instagram linkedin pinterest podio reddit spotify twitch twitter twitter-alt whatsapp xing youtube hammer art migrate performance universal-access universal-access-alt tickets nametag clipboard heart megaphone schedule tide rest-api code-standards buddicons-activity buddicons-bbpress-logo buddicons-buddypress-logo buddicons-community buddicons-forums buddicons-friends buddicons-groups buddicons-pm buddicons-replies buddicons-topics buddicons-tracking wordpress wordpress-alt pressthis update update-alt screenoptions info cart feedback cloud translation tag category archive tagcloud text bell yes yes-alt no no-alt plus plus-alt plus-alt2 minus dismiss marker star-filled star-half star-empty flag warning location location-alt vault shield shield-alt sos search slides text-page analytics chart-pie chart-bar chart-line chart-area groups businessman businesswoman businessperson id id-alt products awards forms testimonial portfolio book book-alt download upload backup clock lightbulb microphone desktop laptop tablet smartphone phone index-card carrot building store album palmtree tickets-alt money money-alt smiley thumbs-up thumbs-down layout paperclip color-picker edit-large edit-page airplane bank beer calculator car coffee drumstick food fullscreen-alt fullscreen-exit-alt games hourglass open-folder pdf pets printer privacy superhero superhero-alt</description>
+    <content><![CDATA[
+  {
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "telex/block-mermaid-diagram",
+	"version": "0.1.0",
+	"title": "Mermaid Diagram",
+	"category": "widgets",
+	"icon": "chart-area",
+	"description": "Create beautiful diagrams and flowcharts using Mermaid syntax",
+	"example": {
+		"attributes": {
+			"content": "graph TD\n    A[Start] --> B{Is it working?}\n    B -->|Yes| C[Great!]\n    B -->|No| D[Fix it]\n    D --> B"
+		}
+	},
+	"attributes": {
+		"content": {
+			"type": "string",
+			"default": "graph TD\n    A[Start] --> B[End]"
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": true
+	},
+	"textdomain": "mermaid-diagram-block-wp",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js",
+	"render": "file:./render.php"
+}
+  ]]></content>
+  </file>
+  <file path="src/index.js">
+    <description>This file registers the block, specifies the edit and save functions, and loads the block's metadata</description>
+    <content><![CDATA[
+  /**
+ * Registers a new block provided a unique name and an object defining its behavior.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+import { registerBlockType } from '@wordpress/blocks';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * All files containing `style` keyword are bundled together. The code used
+ * gets applied both to the front of your site and to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './style.scss';
+
+/**
+ * Internal dependencies
+ */
+import Edit from './edit';
+import metadata from './block.json';
+
+/**
+ * Every block starts by registering a new block type definition.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
+ */
+registerBlockType( metadata.name, {
+	/**
+	 * @see ./edit.js
+	 */
+	edit: Edit,
+} );
+	]]></content>
+  </file>
+  <file path="src/edit.js">
+    <description>This file contains the edit function for the block which is responsible for rendering the block in the editor.</description>
+    <content><![CDATA[/**
+ * Retrieves the translation of text.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
+ * React hook that is used to mark the block wrapper element.
+ * It provides all the necessary props like the class name.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
+ */
+import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+
+/**
+ * WordPress dependencies
+ */
+import { 
+	PanelBody, 
+	TextareaControl, 
+	Button,
+	Notice,
+	ToggleControl
+} from '@wordpress/components';
+import { useState, useEffect, useRef } from '@wordpress/element';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * Those files can contain any CSS code that gets applied to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './editor.scss';
+
+/**
+ * The edit function describes the structure of your block in the context of the
+ * editor. This represents what the editor will render when the block is used.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
+ *
+ * @param {Object}   props               Properties passed to the function.
+ * @param {Object}   props.attributes    Available block attributes.
+ * @param {Function} props.setAttributes Function that updates individual attributes.
+ *
+ * @return {Element} Element to render.
+ */
+export default function Edit( { attributes, setAttributes } ) {
+	const { content } = attributes;
+	const [ showCodeEditor, setShowCodeEditor ] = useState( false );
+	const [ diagramId ] = useState( `mermaid-${ Math.random().toString( 36 ).substr( 2, 9 ) }` );
+	const [ renderError, setRenderError ] = useState( null );
+	const [ mermaidReady, setMermaidReady ] = useState( false );
+	const diagramRef = useRef();
+
+	const blockProps = useBlockProps( {
+		className: 'mermaid-diagram-block'
+	} );
+
+	// Load Mermaid library for preview
+	useEffect( () => {
+		const loadMermaid = async () => {
+			if ( window.mermaid ) {
+				setMermaidReady( true );
+				return;
+			}
+
+			const script = document.createElement( 'script' );
+			script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js';
+			script.onload = () => {
+				window.mermaid.initialize( { 
+					startOnLoad: false,
+					theme: 'default',
+					securityLevel: 'loose'
+				} );
+				setMermaidReady( true );
+			};
+			document.head.appendChild( script );
+		};
+
+		loadMermaid();
+	}, [] );
+
+	// Render diagram preview
+	useEffect( () => {
+		if ( mermaidReady && content && diagramRef.current ) {
+			const renderDiagram = async () => {
+				try {
+					setRenderError( null );
+					const element = diagramRef.current;
+					if ( element ) {
+						element.innerHTML = '';
+						const { svg } = await window.mermaid.render( `${ diagramId }-svg`, content );
+						element.innerHTML = svg;
+					}
+				} catch ( error ) {
+					setRenderError( error.message );
+				}
+			};
+
+			const timeoutId = setTimeout( renderDiagram, 300 );
+			return () => clearTimeout( timeoutId );
+		}
+	}, [ content, mermaidReady, diagramId ] );
+
+	const exampleDiagrams = [
+		{
+			name: __( 'Simple Flowchart', 'mermaid-diagram-block-wp' ),
+			code: 'graph TD\n    A[Start] --> B{Decision?}\n    B -->|Yes| C[Action 1]\n    B -->|No| D[Action 2]\n    C --> E[End]\n    D --> E'
+		},
+		{
+			name: __( 'Sequence Diagram', 'mermaid-diagram-block-wp' ),
+			code: 'sequenceDiagram\n    participant A as Alice\n    participant B as Bob\n    A->>B: Hello Bob, how are you?\n    B-->>A: Great thanks!'
+		},
+		{
+			name: __( 'Pie Chart', 'mermaid-diagram-block-wp' ),
+			code: 'pie title Sample Pie Chart\n    "Apples" : 42\n    "Oranges" : 30\n    "Bananas" : 28'
+		},
+		{
+			name: __( 'Gantt Chart', 'mermaid-diagram-block-wp' ),
+			code: 'gantt\n    title Project Timeline\n    dateFormat  YYYY-MM-DD\n    section Design\n    Research    :done, research, 2024-01-01,2024-01-10\n    Wireframes  :active, wireframes, 2024-01-11, 10d\n    section Development\n    Setup       :dev1, after wireframes, 5d\n    Coding      :dev2, after dev1, 20d'
+		}
+	];
+
+	return (
+		<>
+			<InspectorControls>
+				<PanelBody title={ __( 'Diagram Settings', 'mermaid-diagram-block-wp' ) }>
+					<div className="mermaid-diagram-controls">
+						<ToggleControl
+							label={ __( 'Show Code Editor', 'mermaid-diagram-block-wp' ) }
+							checked={ showCodeEditor }
+							onChange={ setShowCodeEditor }
+							help={ showCodeEditor ? 
+								__( 'Code editor is visible alongside the preview', 'mermaid-diagram-block-wp' ) :
+								__( 'Only preview is visible. Toggle to show code editor.', 'mermaid-diagram-block-wp' )
+							}
+						/>
+
+						{ showCodeEditor && (
+							<TextareaControl
+								label={ __( 'Mermaid Diagram Code', 'mermaid-diagram-block-wp' ) }
+								value={ content }
+								onChange={ ( newContent ) => setAttributes( { content: newContent } ) }
+								rows={ 8 }
+								help={ __( 'Enter your Mermaid diagram syntax here. Changes will be reflected in the preview in real-time.', 'mermaid-diagram-block-wp' ) }
+							/>
+						) }
+
+						<PanelBody 
+							title={ __( 'Quick Examples', 'mermaid-diagram-block-wp' ) }
+							initialOpen={ false }
+						>
+							<p>{ __( 'Click on an example to use it:', 'mermaid-diagram-block-wp' ) }</p>
+							{ exampleDiagrams.map( ( example, index ) => (
+								<Button
+									key={ index }
+									variant="tertiary"
+									onClick={ () => setAttributes( { content: example.code } ) }
+									style={ { display: 'block', marginBottom: '8px', width: '100%' } }
+								>
+									{ example.name }
+								</Button>
+							) ) }
+						</PanelBody>
+					</div>
+				</PanelBody>
+			</InspectorControls>
+
+			<div { ...blockProps }>
+				<div className={ `mermaid-diagram-layout ${ showCodeEditor ? 'with-editor' : 'preview-only' }` }>
+					{ showCodeEditor && (
+						<div className="mermaid-diagram-code">
+							<h4>{ __( 'Diagram Code', 'mermaid-diagram-block-wp' ) }</h4>
+							<TextareaControl
+								value={ content }
+								onChange={ ( newContent ) => setAttributes( { content: newContent } ) }
+								rows={ 8 }
+								placeholder={ __( 'Enter your Mermaid diagram code here...', 'mermaid-diagram-block-wp' ) }
+								className="mermaid-code-input"
+							/>
+						</div>
+					) }
+					
+					<div className="mermaid-diagram-preview">
+						<h4>{ __( 'Live Preview', 'mermaid-diagram-block-wp' ) }</h4>
+						{ renderError && (
+							<Notice status="error" isDismissible={ false }>
+								<strong>{ __( 'Diagram Error:', 'mermaid-diagram-block-wp' ) }</strong>
+								<br />
+								{ renderError }
+							</Notice>
+						) }
+						<div 
+							ref={ diagramRef }
+							className="mermaid-diagram-content"
+						>
+							{ ! mermaidReady && (
+								<div className="mermaid-loading">
+									{ __( 'Loading Mermaid...', 'mermaid-diagram-block-wp' ) }
+								</div>
+							) }
+						</div>
+					</div>
+				</div>
+			</div>
+		</>
+	);
+}]]></content>
+  </file>
+  <file path="src/save.js">
+    <description>This file contains the save function for the block which is responsible for creating the static result of rendering the block on the client to display the saved result on the front end.</description>
+    <content><![CDATA[
+  
+	]]></content>
+  </file>
+  <file path="src/style.scss">
+    <description>This file contains styles for the block in the front end.</description>
+    <content><![CDATA[
+  /**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ */
+
+.wp-block-telex-block-mermaid-diagram {
+	margin: 1.5rem 0;
+	
+	.mermaid-diagram-container {
+		background: #fff;
+		border: 1px solid #e1e1e1;
+		border-radius: 4px;
+		padding: 1rem;
+		text-align: center;
+		overflow-x: auto;
+		
+		svg {
+			max-width: 100%;
+			height: auto;
+		}
+	}
+	
+	.mermaid-error {
+		background: #f8d7da;
+		border: 1px solid #f5c6cb;
+		color: #721c24;
+		padding: 1rem;
+		border-radius: 4px;
+		
+		strong {
+			display: block;
+			margin-bottom: 0.5rem;
+		}
+		
+		code {
+			background: rgba(0, 0, 0, 0.1);
+			padding: 2px 4px;
+			border-radius: 2px;
+			font-size: 0.875em;
+		}
+	}
+	
+	.mermaid-loading {
+		padding: 2rem;
+		text-align: center;
+		color: #666;
+		font-style: italic;
+	}
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+	.wp-block-telex-block-mermaid-diagram {
+		.mermaid-diagram-container {
+			padding: 0.75rem;
+		}
+	}
+}
+	]]></content>
+  </file>
+  <file path="src/editor.scss">
+    <description>This file contains styles for the block in the editor.</description>
+    <content><![CDATA[/**
+ * The following styles get applied inside the editor only.
+ */
+
+.wp-block-telex-block-mermaid-diagram {
+	border: 2px dashed #ddd;
+	border-radius: 4px;
+	padding: 1rem;
+	
+	.mermaid-diagram-layout {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		
+		&.with-editor {
+			flex-direction: row;
+			gap: 1.5rem;
+			
+			.mermaid-diagram-code,
+			.mermaid-diagram-preview {
+				flex: 1;
+			}
+		}
+		
+		&.preview-only {
+			.mermaid-diagram-preview {
+				width: 100%;
+			}
+		}
+	}
+	
+	.mermaid-diagram-code {
+		h4 {
+			margin: 0 0 0.75rem 0;
+			color: #1e1e1e;
+			font-size: 14px;
+			font-weight: 600;
+			border-bottom: 1px solid #e0e0e0;
+			padding-bottom: 0.5rem;
+		}
+		
+		.mermaid-code-input {
+			textarea {
+				font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+				font-size: 12px !important;
+				line-height: 1.5 !important;
+				resize: vertical;
+				border: 1px solid #ccd0d4;
+				border-radius: 4px;
+				padding: 0.75rem;
+				
+				&:focus {
+					border-color: #007cba;
+					box-shadow: 0 0 0 1px #007cba;
+					outline: none;
+				}
+			}
+		}
+	}
+	
+	.mermaid-diagram-preview {
+		h4 {
+			margin: 0 0 0.75rem 0;
+			color: #1e1e1e;
+			font-size: 14px;
+			font-weight: 600;
+			border-bottom: 1px solid #e0e0e0;
+			padding-bottom: 0.5rem;
+		}
+		
+		.mermaid-diagram-content {
+			background: #fff;
+			border: 1px solid #e1e1e1;
+			border-radius: 4px;
+			padding: 1rem;
+			min-height: 200px;
+			text-align: center;
+			position: relative;
+			overflow: auto;
+			
+			svg {
+				max-width: 100%;
+				height: auto;
+			}
+		}
+		
+		.mermaid-loading {
+			padding: 3rem;
+			color: #666;
+			font-style: italic;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 150px;
+		}
+	}
+}
+
+// Inspector Controls Styling
+.mermaid-diagram-controls {
+	.components-toggle-control {
+		margin-bottom: 1rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid #e0e0e0;
+	}
+	
+	.components-textarea-control {
+		margin-bottom: 1rem;
+		
+		textarea {
+			font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+			font-size: 12px !important;
+			line-height: 1.4 !important;
+		}
+	}
+	
+	.components-panel__body {
+		.components-button {
+			justify-content: flex-start;
+			text-align: left;
+			white-space: normal;
+			word-wrap: break-word;
+		}
+	}
+}
+
+// Responsive adjustments for editor
+@media (max-width: 1200px) {
+	.wp-block-telex-block-mermaid-diagram {
+		.mermaid-diagram-layout.with-editor {
+			flex-direction: column;
+			
+			.mermaid-diagram-code,
+			.mermaid-diagram-preview {
+				width: 100%;
+			}
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.wp-block-telex-block-mermaid-diagram {
+		padding: 0.75rem;
+		
+		.mermaid-diagram-layout {
+			gap: 1rem;
+		}
+		
+		.mermaid-diagram-preview .mermaid-diagram-content {
+			padding: 0.75rem;
+			min-height: 150px;
+		}
+	}
+}]]></content>
+  </file>
+  <file path="src/view.js">
+    <description>This file contains the view function for the block which is responsible for rendering interactive behaviors of the block on the front end. Ideally using the WordPress interactivity API.</description>
+    <content><![CDATA[
+  /**
+ * Frontend JavaScript for Mermaid Diagram block
+ * Initializes and renders Mermaid diagrams on the frontend
+ */
+
+document.addEventListener('DOMContentLoaded', function() {
+	// Initialize Mermaid when the library is loaded
+	if (typeof mermaid !== 'undefined') {
+		mermaid.initialize({
+			startOnLoad: false,
+			theme: 'default',
+			securityLevel: 'loose',
+			flowchart: {
+				useMaxWidth: true,
+				htmlLabels: true
+			}
+		});
+
+		// Find all mermaid diagram blocks and render them
+		const mermaidBlocks = document.querySelectorAll('.wp-block-telex-block-mermaid-diagram .mermaid-diagram-container');
+		
+		mermaidBlocks.forEach(function(block, index) {
+			const diagramCode = block.getAttribute('data-mermaid');
+			const diagramId = 'mermaid-diagram-' + index;
+			
+			if (diagramCode) {
+				// Create a unique ID for this diagram
+				block.id = diagramId;
+				
+				// Render the diagram
+				mermaid.render(diagramId + '-svg', diagramCode)
+					.then(function(result) {
+						block.innerHTML = result.svg;
+					})
+					.catch(function(error) {
+						console.error('Mermaid rendering error:', error);
+						block.innerHTML = '<div class="mermaid-error"><strong>Diagram Error:</strong><br>' + 
+							'<code>' + error.message + '</code></div>';
+					});
+			}
+		});
+	} else {
+		console.error('Mermaid library not loaded');
+	}
+});
+	]]></content>
+  </file>
+  <file path="src/render.php">
+    <description>This file contains the render callback function for the block, which is responsible for rendering the block content on the front end. A render function should exist only if the block is dynamic.</description>
+    <content><![CDATA[<?php
+/**
+ * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
+ */
+
+$content = $attributes['content'] ?? 'graph TD\n    A[Start] --> B[End]';
+$wrapper_attributes = get_block_wrapper_attributes();
+?>
+
+<div <?php echo $wrapper_attributes; ?>>
+	<div class="mermaid-diagram-container" data-mermaid="<?php echo esc_attr( $content ); ?>">
+		<div class="mermaid-loading">
+			<?php esc_html_e( 'Loading diagram...', 'mermaid-diagram-block-wp' ); ?>
+		</div>
+	</div>
+</div>
+]]></content>
+  </file>
+  <file path="package.json">
+    <description>The AI assistant should only edit 'user_provided_block_name_slug', 'description' and resolve 'isDynamicVariant' in this file and ALWAYS INCLUDE IT. This file includes the necessary scripts for building, formatting, and linting the block code. Dependencies are managed at the workspace level via pnpm.</description>
+    <content><![CDATA[
+  {
+	"name": "mermaid-diagram",
+	"version": "0.1.0",
+	"description": "Create beautiful diagrams and flowcharts using Mermaid syntax directly in your WordPress posts and pages.",
+	"author": "WordPress Telex",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "wp-scripts build",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start"
+	}
+}
+]]></content>
+  </file>
+</artefact>

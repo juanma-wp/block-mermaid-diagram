@@ -1,0 +1,209 @@
+/**
+ * Retrieves the translation of text.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
+ * React hook that is used to mark the block wrapper element.
+ * It provides all the necessary props like the class name.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
+ */
+import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+
+/**
+ * WordPress dependencies
+ */
+import { 
+	PanelBody, 
+	TextareaControl, 
+	Button,
+	Notice,
+	ToggleControl
+} from '@wordpress/components';
+import { useState, useEffect, useRef } from '@wordpress/element';
+
+/**
+ * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
+ * Those files can contain any CSS code that gets applied to the editor.
+ *
+ * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
+ */
+import './editor.scss';
+
+/**
+ * The edit function describes the structure of your block in the context of the
+ * editor. This represents what the editor will render when the block is used.
+ *
+ * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
+ *
+ * @param {Object}   props               Properties passed to the function.
+ * @param {Object}   props.attributes    Available block attributes.
+ * @param {Function} props.setAttributes Function that updates individual attributes.
+ *
+ * @return {Element} Element to render.
+ */
+export default function Edit( { attributes, setAttributes } ) {
+	const { content } = attributes;
+	const [ showCodeEditor, setShowCodeEditor ] = useState( false );
+	const [ diagramId ] = useState( `mermaid-${ Math.random().toString( 36 ).substr( 2, 9 ) }` );
+	const [ renderError, setRenderError ] = useState( null );
+	const [ mermaidReady, setMermaidReady ] = useState( false );
+	const diagramRef = useRef();
+
+	const blockProps = useBlockProps( {
+		className: 'mermaid-diagram-block'
+	} );
+
+	// Load Mermaid library for preview
+	useEffect( () => {
+		const loadMermaid = async () => {
+			if ( window.mermaid ) {
+				setMermaidReady( true );
+				return;
+			}
+
+			const script = document.createElement( 'script' );
+			script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js';
+			script.onload = () => {
+				window.mermaid.initialize( { 
+					startOnLoad: false,
+					theme: 'default',
+					securityLevel: 'loose'
+				} );
+				setMermaidReady( true );
+			};
+			document.head.appendChild( script );
+		};
+
+		loadMermaid();
+	}, [] );
+
+	// Render diagram preview
+	useEffect( () => {
+		if ( mermaidReady && content && diagramRef.current ) {
+			const renderDiagram = async () => {
+				try {
+					setRenderError( null );
+					const element = diagramRef.current;
+					if ( element ) {
+						element.innerHTML = '';
+						const { svg } = await window.mermaid.render( `${ diagramId }-svg`, content );
+						element.innerHTML = svg;
+					}
+				} catch ( error ) {
+					setRenderError( error.message );
+				}
+			};
+
+			const timeoutId = setTimeout( renderDiagram, 300 );
+			return () => clearTimeout( timeoutId );
+		}
+	}, [ content, mermaidReady, diagramId ] );
+
+	const exampleDiagrams = [
+		{
+			name: __( 'Simple Flowchart', 'mermaid-diagram-block-wp' ),
+			code: 'graph TD\n    A[Start] --> B{Decision?}\n    B -->|Yes| C[Action 1]\n    B -->|No| D[Action 2]\n    C --> E[End]\n    D --> E'
+		},
+		{
+			name: __( 'Sequence Diagram', 'mermaid-diagram-block-wp' ),
+			code: 'sequenceDiagram\n    participant A as Alice\n    participant B as Bob\n    A->>B: Hello Bob, how are you?\n    B-->>A: Great thanks!'
+		},
+		{
+			name: __( 'Pie Chart', 'mermaid-diagram-block-wp' ),
+			code: 'pie title Sample Pie Chart\n    "Apples" : 42\n    "Oranges" : 30\n    "Bananas" : 28'
+		},
+		{
+			name: __( 'Gantt Chart', 'mermaid-diagram-block-wp' ),
+			code: 'gantt\n    title Project Timeline\n    dateFormat  YYYY-MM-DD\n    section Design\n    Research    :done, research, 2024-01-01,2024-01-10\n    Wireframes  :active, wireframes, 2024-01-11, 10d\n    section Development\n    Setup       :dev1, after wireframes, 5d\n    Coding      :dev2, after dev1, 20d'
+		}
+	];
+
+	return (
+		<>
+			<InspectorControls>
+				<PanelBody title={ __( 'Diagram Settings', 'mermaid-diagram-block-wp' ) }>
+					<div className="mermaid-diagram-controls">
+						<ToggleControl
+							label={ __( 'Show Code Editor', 'mermaid-diagram-block-wp' ) }
+							checked={ showCodeEditor }
+							onChange={ setShowCodeEditor }
+							help={ showCodeEditor ? 
+								__( 'Code editor is visible alongside the preview', 'mermaid-diagram-block-wp' ) :
+								__( 'Only preview is visible. Toggle to show code editor.', 'mermaid-diagram-block-wp' )
+							}
+						/>
+
+						{ showCodeEditor && (
+							<TextareaControl
+								label={ __( 'Mermaid Diagram Code', 'mermaid-diagram-block-wp' ) }
+								value={ content }
+								onChange={ ( newContent ) => setAttributes( { content: newContent } ) }
+								rows={ 8 }
+								help={ __( 'Enter your Mermaid diagram syntax here. Changes will be reflected in the preview in real-time.', 'mermaid-diagram-block-wp' ) }
+							/>
+						) }
+
+						<PanelBody 
+							title={ __( 'Quick Examples', 'mermaid-diagram-block-wp' ) }
+							initialOpen={ false }
+						>
+							<p>{ __( 'Click on an example to use it:', 'mermaid-diagram-block-wp' ) }</p>
+							{ exampleDiagrams.map( ( example, index ) => (
+								<Button
+									key={ index }
+									variant="tertiary"
+									onClick={ () => setAttributes( { content: example.code } ) }
+									style={ { display: 'block', marginBottom: '8px', width: '100%' } }
+								>
+									{ example.name }
+								</Button>
+							) ) }
+						</PanelBody>
+					</div>
+				</PanelBody>
+			</InspectorControls>
+
+			<div { ...blockProps }>
+				<div className={ `mermaid-diagram-layout ${ showCodeEditor ? 'with-editor' : 'preview-only' }` }>
+					{ showCodeEditor && (
+						<div className="mermaid-diagram-code">
+							<h4>{ __( 'Diagram Code', 'mermaid-diagram-block-wp' ) }</h4>
+							<TextareaControl
+								value={ content }
+								onChange={ ( newContent ) => setAttributes( { content: newContent } ) }
+								rows={ 8 }
+								placeholder={ __( 'Enter your Mermaid diagram code here...', 'mermaid-diagram-block-wp' ) }
+								className="mermaid-code-input"
+							/>
+						</div>
+					) }
+					
+					<div className="mermaid-diagram-preview">
+						<h4>{ __( 'Live Preview', 'mermaid-diagram-block-wp' ) }</h4>
+						{ renderError && (
+							<Notice status="error" isDismissible={ false }>
+								<strong>{ __( 'Diagram Error:', 'mermaid-diagram-block-wp' ) }</strong>
+								<br />
+								{ renderError }
+							</Notice>
+						) }
+						<div 
+							ref={ diagramRef }
+							className="mermaid-diagram-content"
+						>
+							{ ! mermaidReady && (
+								<div className="mermaid-loading">
+									{ __( 'Loading Mermaid...', 'mermaid-diagram-block-wp' ) }
+								</div>
+							) }
+						</div>
+					</div>
+				</div>
+			</div>
+		</>
+	);
+}

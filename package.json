@@ -1,0 +1,18 @@
+
+  {
+	"name": "mermaid-diagram",
+	"version": "0.1.0",
+	"description": "Create beautiful diagrams and flowcharts using Mermaid syntax directly in your WordPress posts and pages.",
+	"author": "WordPress Telex",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "wp-scripts build",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start"
+	}
+}

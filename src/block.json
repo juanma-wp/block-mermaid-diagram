@@ -1,0 +1,33 @@
+
+  {
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "telex/block-mermaid-diagram",
+	"version": "0.1.0",
+	"title": "Mermaid Diagram",
+	"category": "widgets",
+	"icon": "chart-area",
+	"description": "Create beautiful diagrams and flowcharts using Mermaid syntax",
+	"example": {
+		"attributes": {
+			"content": "graph TD\n    A[Start] --> B{Is it working?}\n    B -->|Yes| C[Great!]\n    B -->|No| D[Fix it]\n    D --> B"
+		}
+	},
+	"attributes": {
+		"content": {
+			"type": "string",
+			"default": "graph TD\n    A[Start] --> B[End]"
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": true
+	},
+	"textdomain": "mermaid-diagram-block-wp",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"viewScript": "file:./view.js",
+	"render": "file:./render.php"
+}
+  

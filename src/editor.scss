@@ -1,0 +1,154 @@
+/**
+ * The following styles get applied inside the editor only.
+ */
+
+.wp-block-telex-block-mermaid-diagram {
+	border: 2px dashed #ddd;
+	border-radius: 4px;
+	padding: 1rem;
+	
+	.mermaid-diagram-layout {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		
+		&.with-editor {
+			flex-direction: row;
+			gap: 1.5rem;
+			
+			.mermaid-diagram-code,
+			.mermaid-diagram-preview {
+				flex: 1;
+			}
+		}
+		
+		&.preview-only {
+			.mermaid-diagram-preview {
+				width: 100%;
+			}
+		}
+	}
+	
+	.mermaid-diagram-code {
+		h4 {
+			margin: 0 0 0.75rem 0;
+			color: #1e1e1e;
+			font-size: 14px;
+			font-weight: 600;
+			border-bottom: 1px solid #e0e0e0;
+			padding-bottom: 0.5rem;
+		}
+		
+		.mermaid-code-input {
+			textarea {
+				font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+				font-size: 12px !important;
+				line-height: 1.5 !important;
+				resize: vertical;
+				border: 1px solid #ccd0d4;
+				border-radius: 4px;
+				padding: 0.75rem;
+				
+				&:focus {
+					border-color: #007cba;
+					box-shadow: 0 0 0 1px #007cba;
+					outline: none;
+				}
+			}
+		}
+	}
+	
+	.mermaid-diagram-preview {
+		h4 {
+			margin: 0 0 0.75rem 0;
+			color: #1e1e1e;
+			font-size: 14px;
+			font-weight: 600;
+			border-bottom: 1px solid #e0e0e0;
+			padding-bottom: 0.5rem;
+		}
+		
+		.mermaid-diagram-content {
+			background: #fff;
+			border: 1px solid #e1e1e1;
+			border-radius: 4px;
+			padding: 1rem;
+			min-height: 200px;
+			text-align: center;
+			position: relative;
+			overflow: auto;
+			
+			svg {
+				max-width: 100%;
+				height: auto;
+			}
+		}
+		
+		.mermaid-loading {
+			padding: 3rem;
+			color: #666;
+			font-style: italic;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 150px;
+		}
+	}
+}
+
+// Inspector Controls Styling
+.mermaid-diagram-controls {
+	.components-toggle-control {
+		margin-bottom: 1rem;
+		padding-bottom: 1rem;
+		border-bottom: 1px solid #e0e0e0;
+	}
+	
+	.components-textarea-control {
+		margin-bottom: 1rem;
+		
+		textarea {
+			font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace !important;
+			font-size: 12px !important;
+			line-height: 1.4 !important;
+		}
+	}
+	
+	.components-panel__body {
+		.components-button {
+			justify-content: flex-start;
+			text-align: left;
+			white-space: normal;
+			word-wrap: break-word;
+		}
+	}
+}
+
+// Responsive adjustments for editor
+@media (max-width: 1200px) {
+	.wp-block-telex-block-mermaid-diagram {
+		.mermaid-diagram-layout.with-editor {
+			flex-direction: column;
+			
+			.mermaid-diagram-code,
+			.mermaid-diagram-preview {
+				width: 100%;
+			}
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.wp-block-telex-block-mermaid-diagram {
+		padding: 0.75rem;
+		
+		.mermaid-diagram-layout {
+			gap: 1rem;
+		}
+		
+		.mermaid-diagram-preview .mermaid-diagram-content {
+			padding: 0.75rem;
+			min-height: 150px;
+		}
+	}
+}

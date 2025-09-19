@@ -1,0 +1,60 @@
+
+  /**
+ * The following styles get applied both on the front of your site
+ * and in the editor.
+ */
+
+.wp-block-telex-block-mermaid-diagram {
+	margin: 1.5rem 0;
+	
+	.mermaid-diagram-container {
+		background: #fff;
+		border: 1px solid #e1e1e1;
+		border-radius: 4px;
+		padding: 1rem;
+		text-align: center;
+		overflow-x: auto;
+		
+		svg {
+			max-width: 100%;
+			height: auto;
+		}
+	}
+	
+	.mermaid-error {
+		background: #f8d7da;
+		border: 1px solid #f5c6cb;
+		color: #721c24;
+		padding: 1rem;
+		border-radius: 4px;
+		
+		strong {
+			display: block;
+			margin-bottom: 0.5rem;
+		}
+		
+		code {
+			background: rgba(0, 0, 0, 0.1);
+			padding: 2px 4px;
+			border-radius: 2px;
+			font-size: 0.875em;
+		}
+	}
+	
+	.mermaid-loading {
+		padding: 2rem;
+		text-align: center;
+		color: #666;
+		font-style: italic;
+	}
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+	.wp-block-telex-block-mermaid-diagram {
+		.mermaid-diagram-container {
+			padding: 0.75rem;
+		}
+	}
+}
+	
