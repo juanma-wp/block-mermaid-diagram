@@ -61,3 +61,5 @@ temp/
 *.bak
 *.backup
 *.old
+
+vendor/

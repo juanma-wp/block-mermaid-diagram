@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<ruleset name="Mermaid-Diagram">
+	<description>WordPress Coding Standards for Mermaid Diagram plugin</description>
+
+	<!-- Files to check -->
+	<file>.</file>
+
+	<!-- Use WordPress coding standard -->
+	<rule ref="WordPress">
+		<!-- Exclude problematic sniffs that cause PHP 8+ issues -->
+		<exclude name="WordPress.WP.I18n"/>
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals"/>
+
+		<!-- File comment exclusions -->
+		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag"/>
+		<exclude name="Squiz.Commenting.FileComment.SpacingAfterOpen"/>
+
+		<!-- Allow test files to use different naming conventions -->
+		<exclude name="WordPress.Files.FileName"/>
+	</rule>
+
+	<!-- Exclude vendor, node_modules, build and assets -->
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>node_modules/*</exclude-pattern>
+	<exclude-pattern>build/*</exclude-pattern>
+	<exclude-pattern>assets/*</exclude-pattern>
+	<exclude-pattern>tests/*</exclude-pattern>
+
+	<!-- Check PHP files -->
+	<arg name="extensions" value="php"/>
+
+	<!-- WordPress and PHP version configuration -->
+	<config name="minimum_supported_wp_version" value="6.1"/>
+	<config name="testVersion" value="7.0-"/>
+
+	<!-- Show progress -->
+	<arg value="ps"/>
+
+	<!-- Use colors -->
+	<arg name="colors"/>
+</ruleset>

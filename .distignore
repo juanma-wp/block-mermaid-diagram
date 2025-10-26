@@ -1,0 +1,67 @@
+# Development and build files
+/.git
+/.github
+/node_modules
+/src
+*.md
+.DS_Store
+.editorconfig
+.gitignore
+.gitattributes
+.distignore
+
+# NPM files
+package.json
+package-lock.json
+
+# WordPress environment
+.wp-env.json
+.wp-env.override.json
+
+# IDE files
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+Thumbs.db
+
+# Project specific files
+artefact.xml
+
+# Build and development scripts
+webpack.config.js
+.babelrc
+.eslintrc
+.eslintrc.js
+.eslintrc.json
+.prettierrc
+.prettierrc.js
+.prettierrc.json
+
+# Testing files
+*.test.js
+*.spec.js
+/tests
+phpunit.xml
+phpunit.xml.dist
+.phpunit.result.cache
+
+# Documentation that's not needed in production
+/docs
+CHANGELOG.md
+CONTRIBUTING.md
+README.md
+
+# Logs and cache
+*.log
+/logs
+*.cache
+
+# PHPCS and Composer files
+/vendor
+/scripts
+composer.json
+composer.lock
+phpcs.xml

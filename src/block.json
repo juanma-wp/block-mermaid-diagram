@@ -23,7 +23,7 @@
 		"html": false,
 		"align": true
 	},
-	"textdomain": "mermaid-diagram-block-wp",
+	"textdomain": "juanma-mermaid-diagram-block",
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",

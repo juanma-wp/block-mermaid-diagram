@@ -1,7 +1,7 @@
 
-=== Mermaid Diagram ===
+=== JuanMa Mermaid Diagram ===
 
-Contributors:      WordPress Telex
+Contributors:      juanmagarrido
 Tags:              block, diagram, mermaid, flowchart, visualization
 Tested up to:      6.8
 Stable tag:        0.1.0

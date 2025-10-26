@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name:       Mermaid Diagram
+ * Plugin Name:       JuanMa Mermaid Diagram
  * Description:       Create beautiful diagrams and flowcharts using Mermaid syntax directly in your WordPress posts and pages.
  * Version:           0.1.0
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Author:            WordPress Telex
+ * Author:            JuanMa Garrido <juanma.garrido@gmail.com>
  * License:           GPLv2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       mermaid-diagram-block-wp
+ * Text Domain:       juanma-mermaid-diagram-block
  *
  * @package MermaidDiagram
  */
@@ -36,7 +36,7 @@ function mermaid_diagram_enqueue_scripts() {
 	if ( has_block( 'telex/block-mermaid-diagram' ) ) {
 		wp_enqueue_script(
 			'mermaid',
-			'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js',
+			plugin_dir_url( __FILE__ ) . 'assets/js/mermaid.min.js',
 			array(),
 			'10.6.1',
 			true

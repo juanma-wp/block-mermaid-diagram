@@ -1,9 +1,9 @@
 
   {
-	"name": "mermaid-diagram",
+	"name": "juanma-mermaid-diagram-block",
 	"version": "0.1.0",
 	"description": "Create beautiful diagrams and flowcharts using Mermaid syntax directly in your WordPress posts and pages.",
-	"author": "WordPress Telex",
+	"author": "JuanMa Garrido",
 	"license": "GPL-2.0-or-later",
 	"main": "build/index.js",
 	"scripts": {
@@ -13,6 +13,24 @@
 		"lint:js": "wp-scripts lint-js",
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
-		"start": "wp-scripts start"
+		"start": "wp-scripts start",
+		"env": "wp-env",
+		"env:start": "wp-env start",
+		"env:start:debug": "wp-env start --xdebug",
+		"env:stop": "wp-env stop",
+		"env:destroy": "wp-env destroy",
+		"env:clean": "wp-env clean all",
+		"env:logs": "wp-env logs",
+		"env:reset": "wp-env destroy && wp-env start",
+		"env:update": "wp-env start --update",
+		"env:bash": "wp-env run cli bash",
+		"plugin:check": "wp-env run tests-cli wp plugin check mermaid-diagram --exclude-directories=node_modules,src,.git --exclude-files=.gitignore,.distignore,package.json,package-lock.json,artefact.xml",
+		"composer:install": "wp-env run tests-cli --env-cwd=wp-content/plugins/mermaid-diagram bash -lc 'composer install --no-interaction --prefer-dist'",
+		"composer:update": "wp-env run tests-cli --env-cwd=wp-content/plugins/mermaid-diagram bash -lc 'composer update --no-interaction --prefer-dist'",
+		"lint": "wp-env run tests-cli --env-cwd=wp-content/plugins/mermaid-diagram composer run lint",
+		"lint-fix": "wp-env run tests-cli --env-cwd=wp-content/plugins/mermaid-diagram composer run lint-fix"
+	},
+	"devDependencies": {
+		"@wordpress/env": "^10.31.0"
 	}
 }
