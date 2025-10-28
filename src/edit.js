@@ -9,9 +9,10 @@ import {
 } from '@wordpress/components';
 
 import { useState, useEffect, useRef } from '@wordpress/element';
-import mermaid from 'mermaid';
+
 
 import './editor.scss';
+const mermaid = window.mermaid
 
 export default function Edit( { attributes, setAttributes } ) {
 	const { content } = attributes;
@@ -23,9 +24,9 @@ export default function Edit( { attributes, setAttributes } ) {
 	const blockProps = useBlockProps( {
 		className: 'mermaid-diagram-block'
 	} );
-// Render diagram preview
+
 	useEffect( () => {
-		if ( content && diagramRef.current ) {
+		if ( content && diagramRef.current && mermaid ) {
 			const renderDiagram = async () => {
 				try {
 					setRenderError( null );
