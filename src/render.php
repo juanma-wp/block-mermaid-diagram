@@ -24,7 +24,8 @@ $wrapper_attributes = get_block_wrapper_attributes([
 		'content' => $content,
 		'isLoaded' => false,
 		'hasError' => false,
-		'errorMessage' => ''
+		'errorMessage' => '',
+		'showDiagram' => false
 	], JSON_HEX_QUOT | JSON_HEX_TAG )
 ]);
 ?>
@@ -59,8 +60,8 @@ $wrapper_attributes = get_block_wrapper_attributes([
 		</div>
 		<div
 			class="mermaid-rendered"
-			data-wp-bind--hidden="!context.isLoaded || context.hasError"
-			data-wp-class--mermaid-rendered-visible="context.isLoaded && !context.hasError"
+			data-wp-bind--hidden="!context.showDiagram"
+			data-wp-class--mermaid-rendered-visible="context.showDiagram"
 			role="img"
 			aria-label="<?php esc_attr_e( 'Mermaid diagram', 'juanma-mermaid-diagram-block' ); ?>"
 		></div>

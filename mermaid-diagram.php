@@ -32,11 +32,12 @@ add_action( 'init', 'mermaid_diagram_block_init' );
 /**
  * Register Mermaid.js as a module for use with Interactivity API
  */
+/**
 function mermaid_diagram_register_modules() {
 	// Register Mermaid ESM module
 	wp_register_script_module(
 		'mermaid-esm',
-		plugin_dir_url( __FILE__ ) . 'assets/js/mermaid.esm.min.mjs',
+		'https://cdn.jsdelivr.net/npm/mermaid/+esm',
 		array(),
 		'10.9.0'
 	);
@@ -45,3 +46,19 @@ function mermaid_diagram_register_modules() {
 	// No need to enqueue it directly as it's imported by view.js
 }
 add_action( 'init', 'mermaid_diagram_register_modules' );
+
+*/
+/*
+function mermaid_diagram_enqueue_scripts() {
+	if ( has_block( 'telex/block-mermaid-diagram' ) ) {
+		wp_enqueue_script(
+			'mermaid',
+			plugins_url('assets/js/mermaid.min.js', __FILE__),
+			array(),
+			'10.6.1',
+			true
+		);
+	}
+}
+add_action( 'wp_enqueue_scripts', 'mermaid_diagram_enqueue_scripts' );
+*/

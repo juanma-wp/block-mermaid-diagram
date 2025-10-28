@@ -34,7 +34,6 @@
 		"@wordpress/env": "^10.31.0",
 		"@wordpress/interactivity": "^6.33.0",
 		"@wordpress/scripts": "^30.26.0",
-		"esbuild": "^0.25.11",
 		"mermaid": "^11.12.1"
 	}
 }

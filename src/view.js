@@ -3,7 +3,7 @@
  */
 
 import { store, getContext, getElement } from '@wordpress/interactivity';
-import mermaid from 'mermaid-esm';
+import mermaid from 'mermaid';
 
 // Initialize mermaid once
 mermaid.initialize({
@@ -24,13 +24,20 @@ store('mermaid-diagram', {
 		 * Called via data-wp-init directive
 		 */
 		async initDiagram() {
+			console.log('initDiagram called');
 			const context = getContext();
 			const { ref } = getElement();
+			console.log('Context:', context);
+			console.log('Element ref:', ref);
 			const container = ref.querySelector('.mermaid-rendered');
 
-			if (!container || !context.content) return;
+			if (!container || !context.content) {
+				console.log('Container or content missing', { container, content: context?.content });
+				return;
+			}
 
 			try {
+
 				// Render diagram
 				const { svg } = await mermaid.render(
 					`${context.diagramId}-svg`,
@@ -45,12 +52,18 @@ store('mermaid-diagram', {
 					svgElement.style.height = 'auto';
 				}
 
-				// Update state
+				// Update state - Interactivity API will handle visibility automatically
 				context.isLoaded = true;
+				context.hasError = false;
+				context.showDiagram = true;
+				console.log('Diagram loaded successfully, showDiagram:', context.showDiagram);
 			} catch (error) {
 				console.error('Mermaid rendering error:', error);
+				// Update state - Interactivity API will handle visibility automatically
 				context.hasError = true;
 				context.errorMessage = error.message || 'Failed to render diagram';
+				context.isLoaded = false;
+				context.showDiagram = false;
 			}
 		}
 	}
