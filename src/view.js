@@ -6,10 +6,6 @@ import { store, getContext, getElement } from '@wordpress/interactivity';
 
 const mermaid = window.mermaid;
 
-console.log("view.js loaded");
-console.log("view - Mermaid object:", mermaid);
-
-
 mermaid.initialize({
 	startOnLoad: false,
 	theme: 'default',

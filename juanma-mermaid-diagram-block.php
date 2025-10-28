@@ -45,7 +45,6 @@ function mermaid_diagram_enqueue_frontend_assets() {
 	if ( ! is_admin() ) {
 		// Check if the block is present on the current page
 		if ( has_block( 'telex/block-mermaid-diagram' ) ) {
-			error_log( 'mermaid_diagram_enqueue_frontend_assets - enqueuing on frontend' );
 			wp_enqueue_script( 'mermaid-library' );
 		}
 	}
