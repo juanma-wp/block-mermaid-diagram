@@ -5,6 +5,10 @@
 import { store, getContext, getElement } from '@wordpress/interactivity';
 import mermaid from 'mermaid';
 
+console.log('View.js loaded');
+console.log('Mermaid object:', mermaid);
+console.log('Store function:', store);
+
 // Initialize mermaid once
 mermaid.initialize({
 	startOnLoad: false,
