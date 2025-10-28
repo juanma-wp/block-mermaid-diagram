@@ -3,7 +3,7 @@
  */
 
 import { store, getContext, getElement } from '@wordpress/interactivity';
-import mermaid from 'mermaid';
+const mermaid = window.mermaid;
 
 console.log('View.js loaded');
 console.log('Mermaid object:', mermaid);

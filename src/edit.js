@@ -1,21 +1,5 @@
-/**
- * Retrieves the translation of text.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-i18n/
- */
 import { __ } from '@wordpress/i18n';
-
-/**
- * React hook that is used to mark the block wrapper element.
- * It provides all the necessary props like the class name.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/packages/packages-block-editor/#useblockprops
- */
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
-
-/**
- * WordPress dependencies
- */
 import { 
 	PanelBody, 
 	TextareaControl, 
@@ -23,74 +7,32 @@ import {
 	Notice,
 	ToggleControl
 } from '@wordpress/components';
-import { useState, useEffect, useRef } from '@wordpress/element';
 
-/**
- * Lets webpack process CSS, SASS or SCSS files referenced in JavaScript files.
- * Those files can contain any CSS code that gets applied to the editor.
- *
- * @see https://www.npmjs.com/package/@wordpress/scripts#using-css
- */
+import { useState, useEffect, useRef } from '@wordpress/element';
+import mermaid from 'mermaid';
+
 import './editor.scss';
 
-/**
- * The edit function describes the structure of your block in the context of the
- * editor. This represents what the editor will render when the block is used.
- *
- * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-edit-save/#edit
- *
- * @param {Object}   props               Properties passed to the function.
- * @param {Object}   props.attributes    Available block attributes.
- * @param {Function} props.setAttributes Function that updates individual attributes.
- *
- * @return {Element} Element to render.
- */
 export default function Edit( { attributes, setAttributes } ) {
 	const { content } = attributes;
 	const [ showCodeEditor, setShowCodeEditor ] = useState( false );
 	const [ diagramId ] = useState( `mermaid-${ Math.random().toString( 36 ).substr( 2, 9 ) }` );
 	const [ renderError, setRenderError ] = useState( null );
-	const [ mermaidReady, setMermaidReady ] = useState( false );
 	const diagramRef = useRef();
 
 	const blockProps = useBlockProps( {
 		className: 'mermaid-diagram-block'
 	} );
-
-	// Load Mermaid library for preview
+// Render diagram preview
 	useEffect( () => {
-		const loadMermaid = async () => {
-			if ( window.mermaid ) {
-				setMermaidReady( true );
-				return;
-			}
-
-			const script = document.createElement( 'script' );
-			script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js';
-			script.onload = () => {
-				window.mermaid.initialize( { 
-					startOnLoad: false,
-					theme: 'default',
-					securityLevel: 'loose'
-				} );
-				setMermaidReady( true );
-			};
-			document.head.appendChild( script );
-		};
-
-		loadMermaid();
-	}, [] );
-
-	// Render diagram preview
-	useEffect( () => {
-		if ( mermaidReady && content && diagramRef.current ) {
+		if ( content && diagramRef.current ) {
 			const renderDiagram = async () => {
 				try {
 					setRenderError( null );
 					const element = diagramRef.current;
 					if ( element ) {
 						element.innerHTML = '';
-						const { svg } = await window.mermaid.render( `${ diagramId }-svg`, content );
+						const { svg } = await mermaid.render( `${ diagramId }-svg`, content );
 						element.innerHTML = svg;
 					}
 				} catch ( error ) {
@@ -101,7 +43,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			const timeoutId = setTimeout( renderDiagram, 300 );
 			return () => clearTimeout( timeoutId );
 		}
-	}, [ content, mermaidReady, diagramId ] );
+	}, [ content, diagramId ] );
 
 	const exampleDiagrams = [
 		{
@@ -195,11 +137,7 @@ export default function Edit( { attributes, setAttributes } ) {
 							ref={ diagramRef }
 							className="mermaid-diagram-content"
 						>
-							{ ! mermaidReady && (
-								<div className="mermaid-loading">
-									{ __( 'Loading Mermaid...', 'mermaid-diagram-block-wp' ) }
-								</div>
-							) }
+							
 						</div>
 					</div>
 				</div>
