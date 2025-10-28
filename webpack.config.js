@@ -1,48 +1,35 @@
-const defaultConfig = require('@wordpress/scripts/config/webpack.config');
+const InjectDependenciesPlugin = require('./inject-dependencies-webpack-plugin');
 
-// Plugin to ensure mermaid-library is always in dependencies
-class AddMermaidDependencyPlugin {
-	apply(compiler) {
-		compiler.hooks.emit.tapAsync('AddMermaidDependencyPlugin', (compilation, callback) => {
-			const assetFile = compilation.assets['index.asset.php'];
-			if (assetFile) {
-				let source = assetFile.source();
 
-				// Add mermaid-library if not present
-				if (!source.includes("'mermaid-library'")) {
-					source = source.replace(
-						/'dependencies' => array\((.*?)\)/s,
-						(match, deps) => {
-							const trimmedDeps = deps.trim();
-							return trimmedDeps.length > 0
-								? `'dependencies' => array(${trimmedDeps}, 'mermaid-library')`
-								: `'dependencies' => array('mermaid-library')`;
-						}
-					);
+/**
+ * When using --experimental-modules flag, @wordpress/scripts returns:
+ * [defaultConfigNonModule, defaultConfigModule]
+*/
+const [
+	defaultConfigNonModule,
+	defaultConfigModule,
+] = require('@wordpress/scripts/config/webpack.config');
 
-					compilation.assets['index.asset.php'] = {
-						source: () => source,
-						size: () => source.length
-					};
-				}
-			}
-			callback();
-		});
-	}
-}
+/**
+ * Configuration for custom dependencies to inject into asset files.
+ * Format: { 'asset-file.php': ['dependency-handle', ...] }
+ */
+const customDependencies = {
+	'index.asset.php': ['mermaid-library'],
+	// Add more asset files and their dependencies as needed
+};
 
-// Handle both single config and array of configs from @wordpress/scripts
-const configs = Array.isArray(defaultConfig) ? defaultConfig : [defaultConfig];
 
-module.exports = configs.map(config => {
-	// Only add the plugin to non-module configs (standard builds)
-	if (!config.experiments?.outputModule) {
-		return {
-			...config,
-			plugins: [...config.plugins, new AddMermaidDependencyPlugin()]
-		};
-	}
+// Customize non-module config: add dependency injection
+const customConfigNonModule = {
+	...defaultConfigNonModule,
+	plugins: [
+		...defaultConfigNonModule.plugins,
+		new InjectDependenciesPlugin(customDependencies)
+	]
+};
 
-	// Return module configs unchanged (they don't use index.asset.php)
-	return config;
-});
+// Module config doesn't need modification (doesn't use .asset.php files)
+const customConfigModule = defaultConfigModule;
+
+module.exports = [customConfigNonModule, customConfigModule];
