@@ -63,3 +63,4 @@ temp/
 *.old
 
 vendor/
+interactivity-api/

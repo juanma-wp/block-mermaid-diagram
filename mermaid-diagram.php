@@ -30,17 +30,18 @@ function mermaid_diagram_block_init() {
 add_action( 'init', 'mermaid_diagram_block_init' );
 
 /**
- * Enqueue Mermaid.js library on pages that contain the block
+ * Register Mermaid.js as a module for use with Interactivity API
  */
-function mermaid_diagram_enqueue_scripts() {
-	if ( has_block( 'telex/block-mermaid-diagram' ) ) {
-		wp_enqueue_script(
-			'mermaid',
-			plugin_dir_url( __FILE__ ) . 'assets/js/mermaid.min.js',
-			array(),
-			'10.6.1',
-			true
-		);
-	}
+function mermaid_diagram_register_modules() {
+	// Register Mermaid ESM module
+	wp_register_script_module(
+		'mermaid-esm',
+		plugin_dir_url( __FILE__ ) . 'assets/js/mermaid.esm.min.mjs',
+		array(),
+		'10.9.0'
+	);
+
+	// The view script module will import this when needed
+	// No need to enqueue it directly as it's imported by view.js
 }
-add_action( 'wp_enqueue_scripts', 'mermaid_diagram_enqueue_scripts' );
+add_action( 'init', 'mermaid_diagram_register_modules' );
