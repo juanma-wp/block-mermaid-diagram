@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       JuanMa Mermaid Diagram
+ * Plugin Name:       JuanMa Mermaid Diagram Block
  * Description:       Create beautiful diagrams and flowcharts using Mermaid syntax directly in your WordPress posts and pages.
  * Version:           0.1.0
  * Requires at least: 6.1

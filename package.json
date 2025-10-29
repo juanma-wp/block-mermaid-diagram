@@ -28,7 +28,11 @@
     "composer:install": "wp-env run tests-cli --env-cwd=wp-content/plugins/mermaid-diagram bash -lc 'composer install --no-interaction --prefer-dist'",
     "composer:update": "wp-env run tests-cli --env-cwd=wp-content/plugins/mermaid-diagram bash -lc 'composer update --no-interaction --prefer-dist'",
     "lint": "wp-env run tests-cli --env-cwd=wp-content/plugins/mermaid-diagram composer run lint",
-    "lint-fix": "wp-env run tests-cli --env-cwd=wp-content/plugins/mermaid-diagram composer run lint-fix"
+    "lint-fix": "wp-env run tests-cli --env-cwd=wp-content/plugins/mermaid-diagram composer run lint-fix",
+    "preplugin:build": "npm run build && composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader && docker ps --format '{{.Names}}' | grep tests-cli | xargs -I {} docker exec -u root {} apk add --no-cache zip 2>/dev/null || true",
+    "plugin:build": "wp-env run tests-cli --env-cwd=wp-content/plugins/juanma-mermaid-diagram-block sh bin/build-plugin.sh $npm_package_version",
+    "plugin:build:local": "sh bin/build-plugin-simple.sh",
+    "plugin:zip": "npm run build && npm run plugin:build:local"
   },
   "devDependencies": {
     "@wordpress/env": "^10.31.0",

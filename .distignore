@@ -3,6 +3,8 @@
 /.github
 /node_modules
 /src
+/bin
+/dist
 *.md
 .DS_Store
 .editorconfig
@@ -67,3 +69,4 @@ composer.lock
 phpcs.xml
 phpstan.neon
 phpstan.neon.dist
+/assets/js/mermaid.min.js.map

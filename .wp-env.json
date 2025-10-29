@@ -20,5 +20,9 @@
         "WP_DEBUG_DISPLAY": false
       }
     }
+  },
+  "mappings": {
+    "wp-content/plugins/juanma-mermaid-diagram-block/vendor": "./vendor",
+    "wp-content/plugins/juanma-mermaid-diagram-block/dist": "./dist"
   }
 }

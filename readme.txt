@@ -1,5 +1,5 @@
 
-=== JuanMa Mermaid Diagram ===
+=== JuanMa Mermaid Diagram Block ===
 
 Contributors:      juanmagarrido
 Tags:              block, diagram, mermaid, flowchart, visualization
