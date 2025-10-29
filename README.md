@@ -1,5 +1,12 @@
 # JuanMa Mermaid Diagram Block
 
+[![Plugin Check](https://github.com/juanmaguitar/mermaid-diagram/actions/workflows/plugin-check.yml/badge.svg?branch=main)](https://github.com/juanmaguitar/mermaid-diagram/actions/workflows/plugin-check.yml)
+[![PHPCS](https://github.com/juanmaguitar/mermaid-diagram/actions/workflows/phpcs.yml/badge.svg?branch=main)](https://github.com/juanmaguitar/mermaid-diagram/actions/workflows/phpcs.yml)
+[![PHPStan](https://github.com/juanmaguitar/mermaid-diagram/actions/workflows/phpstan.yml/badge.svg?branch=main)](https://github.com/juanmaguitar/mermaid-diagram/actions/workflows/phpstan.yml)
+[![License: GPL v2](https://img.shields.io/badge/License-GPL%20v2-blue.svg)](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html)
+[![WordPress](https://img.shields.io/badge/WordPress-%3E%3D6.1-blue.svg)](https://wordpress.org)
+[![PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.0-blue.svg)](https://php.net)
+
 A WordPress block plugin that enables you to create beautiful diagrams and flowcharts using Mermaid syntax directly in your WordPress posts and pages.
 
 ## Description
