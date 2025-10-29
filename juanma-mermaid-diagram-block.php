@@ -38,15 +38,17 @@ add_action( 'init', 'mermaid_diagram_block_init' );
  */
 function mermaid_diagram_enqueue_frontend_assets(): void {
 
-	// Check if the block is present on the current page.
-	if ( has_block( 'juanma/block-mermaid-diagram' ) ) {
-		wp_enqueue_script(
-			'mermaid-library',
-			plugins_url( 'assets/js/mermaid.min.js', __FILE__ ),
-			array(),
-			'10.6.1',
-			false
-		);
+	if ( !is_admin() ) {	
+		// Check if the block is present on the current page.
+		if ( has_block( 'juanma/block-mermaid-diagram' ) ) {
+			wp_enqueue_script(
+				'mermaid-library',
+				plugins_url( 'assets/js/mermaid.min.js', __FILE__ ),
+				array(),
+				'10.6.1',
+				false
+			);
+		}
 	}
 }
 add_action( 'enqueue_block_assets', 'mermaid_diagram_enqueue_frontend_assets' );

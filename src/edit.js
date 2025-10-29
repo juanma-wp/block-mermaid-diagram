@@ -12,9 +12,14 @@ import { useState, useEffect, useRef } from '@wordpress/element';
 
 import './editor.scss';
 
+/**
+ * Import Mermaid library for the editor
+ */
+import mermaid from 'mermaid';
+
 export default function Edit( { attributes, setAttributes } ) {
-	const [mermaid] = useState(window.mermaid);
-	const { content } = attributes;
+
+	const { content = 'graph TD\n    A[Start] --> B[End]' } = attributes;
 	const [ showCodeEditor, setShowCodeEditor ] = useState( false );
 	const [ diagramId ] = useState( `mermaid-${ Math.random().toString( 36 ).substr( 2, 9 ) }` );
 	const [ renderError, setRenderError ] = useState( null );
@@ -26,7 +31,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
 	useEffect( () => {
 
-		if ( content && diagramRef.current && mermaid ) {
+		if ( content && diagramRef.current ) {
 			const renderDiagram = async () => {
 				try {
 					setRenderError( null );
@@ -44,7 +49,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			const timeoutId = setTimeout( renderDiagram, 300 );
 			return () => clearTimeout( timeoutId );
 		}
-	}, [ content, mermaid, diagramId ] );
+	}, [ content, diagramId ] );
 
 	const exampleDiagrams = [
 		{
