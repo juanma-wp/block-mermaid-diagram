@@ -12,8 +12,6 @@ import { useState, useEffect, useRef } from '@wordpress/element';
 
 import './editor.scss';
 
-console.log("outside component edit: window.mermaid:", window.mermaid);
-
 export default function Edit( { attributes, setAttributes } ) {
 	const [mermaid] = useState(window.mermaid);
 	const { content } = attributes;
@@ -27,7 +25,7 @@ export default function Edit( { attributes, setAttributes } ) {
 	} );
 
 	useEffect( () => {
-		console.log( 'inside component edit: mermaid:', mermaid );
+
 		if ( content && diagramRef.current && mermaid ) {
 			const renderDiagram = async () => {
 				try {
