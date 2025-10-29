@@ -4,7 +4,7 @@
 	"apiVersion": 3,
 	"name": "juanma/block-mermaid-diagram",
 	"version": "0.1.0",
-	"title": "Mermaid Diagram",
+	"title": "JuanMa Mermaid Diagram",
 	"category": "widgets",
 	"icon": "chart-area",
 	"description": "Create beautiful diagrams and flowcharts using Mermaid syntax",
