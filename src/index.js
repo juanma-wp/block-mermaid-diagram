@@ -21,16 +21,6 @@ import './style.scss';
 import Edit from './edit';
 import metadata from './block.json';
 
-// // Initialize Mermaid with secure settings for the editor
-// mermaid.initialize({
-// 	startOnLoad: false,
-// 	securityLevel: 'loose',
-// 	theme: 'default'
-// });
-
-// // Make mermaid available globally for the editor
-// window.mermaid = mermaid;
-
 /**
  * Every block starts by registering a new block type definition.
  *

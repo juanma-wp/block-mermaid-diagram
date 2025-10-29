@@ -20,6 +20,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 	array(
 		'class'               => implode( ' ', $wrapper_classes ),
 		'data-wp-interactive' => 'mermaid-diagram',
+		'data-wp-init' => 'callbacks.init',
 		'data-wp-context'     => wp_json_encode(
 			array(
 				'diagramId'    => $unique_id,
@@ -39,7 +40,7 @@ $wrapper_attributes = get_block_wrapper_attributes(
 	<div
 		class="mermaid-diagram-container"
 		data-wp-bind--id="context.diagramId"
-		data-wp-init="actions.initDiagram"
+		data-wp-init--mermaid-diagram="callbacks.initDiagram"
 		data-wp-class--mermaid-loaded="context.isLoaded"
 		data-wp-class--mermaid-error-state="context.hasError"
 	>

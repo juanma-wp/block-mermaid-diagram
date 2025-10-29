@@ -3,10 +3,14 @@
  */
 
 import { store, getContext, getElement } from '@wordpress/interactivity';
+import mermaid from 'mermaid-library';
 
-const mermaid = window.mermaid;
+console.log("view.js loaded");
+console.log("view - Mermaid object:", mermaid);
+console.log("view - Interactivity API:", { store, getContext, getElement });
 
-mermaid.initialize({
+// Initialize mermaid with secure settings
+await mermaid.initialize({
 	startOnLoad: false,
 	theme: 'default',
 	securityLevel: 'loose',
@@ -18,10 +22,15 @@ mermaid.initialize({
 });
 
 store('mermaid-diagram', {
-	actions: {
-		async initDiagram() {
+	callbacks: {
+		init: async () => {
+			console.log("init...	");
+		},
+		initDiagram: async () => {
+			console.log("initDiagram...	");
+			console.log("view - initDiagram - Mermaid object:", mermaid);
 			const context = getContext();
-			const { ref } = getElement();
+			const { ref } = getElement();	
 			const container = ref.querySelector('.mermaid-rendered');
 
 			if (!container || !context.content) {

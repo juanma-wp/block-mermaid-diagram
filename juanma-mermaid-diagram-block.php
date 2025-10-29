@@ -26,29 +26,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function mermaid_diagram_block_init(): void {
+	// Register Mermaid as an external script module
+	wp_register_script_module(
+		'mermaid-library',
+		'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs',
+		array(),
+		'10.6.1'
+	);
+
 	register_block_type( __DIR__ . '/build/' );
 }
 add_action( 'init', 'mermaid_diagram_block_init' );
-
-/**
- * Enqueue Mermaid.js library for the frontend only when the block is present.
- * This ensures the library is only loaded when actually needed.
- *
- * @return void
- */
-function mermaid_diagram_enqueue_frontend_assets(): void {
-
-	if ( !is_admin() ) {	
-		// Check if the block is present on the current page.
-		if ( has_block( 'juanma/block-mermaid-diagram' ) ) {
-			wp_enqueue_script(
-				'mermaid-library',
-				plugins_url( 'assets/js/mermaid.min.js', __FILE__ ),
-				array(),
-				'10.6.1',
-				false
-			);
-		}
-	}
-}
-add_action( 'enqueue_block_assets', 'mermaid_diagram_enqueue_frontend_assets' );
