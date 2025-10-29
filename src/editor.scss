@@ -2,7 +2,7 @@
  * The following styles get applied inside the editor only.
  */
 
-.wp-block-telex-block-mermaid-diagram {
+.wp-block-juanma-block-mermaid-diagram {
 	border: 2px dashed #ddd;
 	border-radius: 4px;
 	padding: 1rem;
@@ -126,7 +126,7 @@
 
 // Responsive adjustments for editor
 @media (max-width: 1200px) {
-	.wp-block-telex-block-mermaid-diagram {
+	.wp-block-juanma-block-mermaid-diagram {
 		.mermaid-diagram-layout.with-editor {
 			flex-direction: column;
 			
@@ -139,7 +139,7 @@
 }
 
 @media (max-width: 768px) {
-	.wp-block-telex-block-mermaid-diagram {
+	.wp-block-juanma-block-mermaid-diagram {
 		padding: 0.75rem;
 		
 		.mermaid-diagram-layout {
