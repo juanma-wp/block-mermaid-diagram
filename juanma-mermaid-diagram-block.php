@@ -36,7 +36,7 @@ add_action( 'init', 'mermaid_diagram_block_init' );
 function mermaid_diagram_enqueue_frontend_assets() {
 
 	// Check if the block is present on the current page.
-	if ( has_block( 'telex/block-mermaid-diagram' ) ) {
+	if ( has_block( 'juanma/block-mermaid-diagram' ) ) {
 		wp_enqueue_script(
 			'mermaid-library',
 			plugins_url( 'assets/js/mermaid.min.js', __FILE__ ),
