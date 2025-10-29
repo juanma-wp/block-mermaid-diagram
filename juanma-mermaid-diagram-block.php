@@ -26,13 +26,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function mermaid_diagram_block_init() {
 	register_block_type( __DIR__ . '/build/' );
-	wp_register_script(
-		'mermaid-library',
-		plugins_url( 'assets/js/mermaid.min.js', __FILE__ ),
-		array(),
-		'10.6.1',
-		false
-	);
 }
 add_action( 'init', 'mermaid_diagram_block_init' );
 
@@ -41,12 +34,16 @@ add_action( 'init', 'mermaid_diagram_block_init' );
  * This ensures the library is only loaded when actually needed.
  */
 function mermaid_diagram_enqueue_frontend_assets() {
-	// Only enqueue on frontend, not in editor
-	if ( ! is_admin() ) {
-		// Check if the block is present on the current page
-		if ( has_block( 'telex/block-mermaid-diagram' ) ) {
-			wp_enqueue_script( 'mermaid-library' );
-		}
+
+	// Check if the block is present on the current page.
+	if ( has_block( 'telex/block-mermaid-diagram' ) ) {
+		wp_enqueue_script(
+			'mermaid-library',
+			plugins_url( 'assets/js/mermaid.min.js', __FILE__ ),
+			array(),
+			'10.6.1',
+			false
+		);
 	}
 }
 add_action( 'enqueue_block_assets', 'mermaid_diagram_enqueue_frontend_assets' );

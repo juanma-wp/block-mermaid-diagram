@@ -10,11 +10,12 @@ import {
 
 import { useState, useEffect, useRef } from '@wordpress/element';
 
-
 import './editor.scss';
-const mermaid = window.mermaid
+
+console.log("outside component edit: window.mermaid:", window.mermaid);
 
 export default function Edit( { attributes, setAttributes } ) {
+	const [mermaid] = useState(window.mermaid);
 	const { content } = attributes;
 	const [ showCodeEditor, setShowCodeEditor ] = useState( false );
 	const [ diagramId ] = useState( `mermaid-${ Math.random().toString( 36 ).substr( 2, 9 ) }` );
@@ -26,6 +27,7 @@ export default function Edit( { attributes, setAttributes } ) {
 	} );
 
 	useEffect( () => {
+		console.log( 'inside component edit: mermaid:', mermaid );
 		if ( content && diagramRef.current && mermaid ) {
 			const renderDiagram = async () => {
 				try {
@@ -44,7 +46,7 @@ export default function Edit( { attributes, setAttributes } ) {
 			const timeoutId = setTimeout( renderDiagram, 300 );
 			return () => clearTimeout( timeoutId );
 		}
-	}, [ content, diagramId ] );
+	}, [ content, mermaid, diagramId ] );
 
 	const exampleDiagrams = [
 		{
