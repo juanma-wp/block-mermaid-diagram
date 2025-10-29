@@ -59,9 +59,11 @@ README.md
 /logs
 *.cache
 
-# PHPCS and Composer files
+# PHPCS, PHPStan and Composer files
 /vendor
 /scripts
 composer.json
 composer.lock
 phpcs.xml
+phpstan.neon
+phpstan.neon.dist

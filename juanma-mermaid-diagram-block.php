@@ -23,8 +23,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * through the block editor in the corresponding context.
  *
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
+ * @return void
  */
-function mermaid_diagram_block_init() {
+function mermaid_diagram_block_init(): void {
 	register_block_type( __DIR__ . '/build/' );
 }
 add_action( 'init', 'mermaid_diagram_block_init' );
@@ -32,8 +33,10 @@ add_action( 'init', 'mermaid_diagram_block_init' );
 /**
  * Enqueue Mermaid.js library for the frontend only when the block is present.
  * This ensures the library is only loaded when actually needed.
+ *
+ * @return void
  */
-function mermaid_diagram_enqueue_frontend_assets() {
+function mermaid_diagram_enqueue_frontend_assets(): void {
 
 	// Check if the block is present on the current page.
 	if ( has_block( 'juanma/block-mermaid-diagram' ) ) {

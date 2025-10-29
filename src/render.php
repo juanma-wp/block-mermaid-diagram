@@ -5,29 +5,34 @@
  * @see https://github.com/WordPress/gutenberg/blob/trunk/docs/reference-guides/block-api/block-metadata.md#render
  */
 
-// Get block attributes
-$content = $attributes['content'] ?? 'graph TD\n    A[Start] --> B[End]';
+// Get block attributes.
+$content   = $attributes['content'] ?? 'graph TD\n    A[Start] --> B[End]';
 $unique_id = wp_unique_id( 'mermaid-' );
 
-// Prepare wrapper classes
-$wrapper_classes = [];
+// Prepare wrapper classes.
+$wrapper_classes = array();
 if ( ! empty( $attributes['align'] ) ) {
 	$wrapper_classes[] = 'align' . $attributes['align'];
 }
 
-// Set up the interactive block wrapper with directives
-$wrapper_attributes = get_block_wrapper_attributes([
-	'class' => implode( ' ', $wrapper_classes ),
-	'data-wp-interactive' => 'mermaid-diagram',
-	'data-wp-context' => wp_json_encode([
-		'diagramId' => $unique_id,
-		'content' => $content,
-		'isLoaded' => false,
-		'hasError' => false,
-		'errorMessage' => '',
-		'showDiagram' => false
-	], JSON_HEX_QUOT | JSON_HEX_TAG )
-]);
+// Set up the interactive block wrapper with directives.
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class'               => implode( ' ', $wrapper_classes ),
+		'data-wp-interactive' => 'mermaid-diagram',
+		'data-wp-context'     => wp_json_encode(
+			array(
+				'diagramId'    => $unique_id,
+				'content'      => $content,
+				'isLoaded'     => false,
+				'hasError'     => false,
+				'errorMessage' => '',
+				'showDiagram'  => false,
+			),
+			JSON_HEX_QUOT | JSON_HEX_TAG
+		),
+	)
+);
 ?>
 
 <div <?php echo wp_kses_data( $wrapper_attributes ); ?>>

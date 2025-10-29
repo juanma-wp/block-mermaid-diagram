@@ -1,0 +1,46 @@
+parameters:
+	level: 6
+	paths:
+		- juanma-mermaid-diagram-block.php
+		- src/
+	bootstrapFiles:
+		- tests/bootstrap-phpstan.php
+	excludePaths:
+		- vendor/
+		- node_modules/
+		- build/
+		- tests/
+	# Memory optimization: Completely disable parallel processing
+	parallel:
+		maximumNumberOfProcesses: 1
+	tmpDir: %rootDir%/tmp/phpstan
+	resultCachePath: %rootDir%/tmp/phpstan/result-cache.php
+	# Disable memory-intensive checks
+	checkMissingCallableSignature: false
+	treatPhpDocTypesAsCertain: false
+	ignoreErrors:
+		# WordPress functions that may not be defined during static analysis
+		- '#Function (wp_|get_|is_|current_user_can|sanitize_|wp_json_encode|wp_unslash|wp_generate_password|register_block_type|plugin_dir_url|plugin_dir_path|wp_enqueue_script|wp_register_script|wp_set_script_translations|wp_enqueue_block_editor_assets|wp_enqueue_block_assets|add_action|apply_filters|register_activation_hook|register_deactivation_hook|dbDelta|error_log|function_exists|class_exists|defined|exit|header)\(\) not found\.#'
+		- '#Constant (ABSPATH|WP_DEBUG|WP_CLI|STR_PAD_RIGHT|PHP_VERSION_ID|MERMAID_DIAGRAM_VERSION|MERMAID_DIAGRAM_PLUGIN_DIR|MERMAID_DIAGRAM_PLUGIN_URL) not found\.#'
+		- '#Class (WP_REST_Response|WP_Error|WP_User|wpdb|WP_Block) not found\.#'
+		- '#Access to an undefined property \$wpdb::\$prefix\.#'
+		- '#Call to method [a-zA-Z_]+\(\) on an unknown class wpdb\.#'
+		- '#Variable \$wpdb might not be defined\.#'
+		- '#Function php_sapi_name not found\.#'
+		# Ignore missing array and generic typehints (previously handled by deprecated config options)
+		-
+			identifier: missingType.iterableValue
+		-
+			identifier: missingType.generics
+	reportUnmatchedIgnoredErrors: false
+	# Additional memory-saving settings
+	polluteScopeWithLoopInitialAssignments: false
+	polluteScopeWithAlwaysIterableForeach: false
+	checkAlwaysTrueCheckTypeFunctionCall: false
+	checkAlwaysTrueInstanceof: false
+	checkAlwaysTrueStrictComparison: false
+	checkExplicitMixedMissingReturn: false
+	checkFunctionNameCase: false
+	# Keep WordPress extension but use minimal config to save memory
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
