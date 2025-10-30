@@ -2,64 +2,62 @@
  * WordPress Interactivity API implementation for Mermaid Diagram block
  */
 
-import { store, getContext, getElement } from '@wordpress/interactivity';
-import mermaid from 'mermaid-library';
+import { store, getContext, getElement } from "@wordpress/interactivity";
 
 console.log("view.js loaded");
-console.log("view - Mermaid object:", mermaid);
-console.log("view - Interactivity API:", { store, getContext, getElement });
 
-// Initialize mermaid with secure settings
-await mermaid.initialize({
-	startOnLoad: false,
-	theme: 'default',
-	securityLevel: 'loose',
-	flowchart: {
-		useMaxWidth: true,
-		htmlLabels: true,
-		curve: 'basis'
-	}
-});
+store("mermaid-diagram", {
+  callbacks: {
+    init: async () => {
+      console.log("init...	");
+    },
+    initDiagram: function* () {
+      const { default: mermaid } = yield import("mermaid-library");
 
-store('mermaid-diagram', {
-	callbacks: {
-		init: async () => {
-			console.log("init...	");
-		},
-		initDiagram: async () => {
-			console.log("initDiagram...	");
-			console.log("view - initDiagram - Mermaid object:", mermaid);
-			const context = getContext();
-			const { ref } = getElement();	
-			const container = ref.querySelector('.mermaid-rendered');
+      yield mermaid.initialize({
+        startOnLoad: false,
+        theme: "default",
+        securityLevel: "loose",
+        flowchart: {
+          useMaxWidth: true,
+          htmlLabels: true,
+          curve: "basis",
+        },
+      });
 
-			if (!container || !context.content) {
-				return;
-			}
+      console.log("initDiagram...	");
+      console.log("view - initDiagram - Mermaid object:", mermaid);
+      const context = yield getContext();
+      const { ref } = yield getElement();
+      const container = ref.querySelector(".mermaid-rendered");
 
-			try {
-				const { svg } = await mermaid.render(
-					`${context.diagramId}-svg`,
-					context.content
-				);
+      if (!container || !context.content) {
+        return;
+      }
 
-				container.innerHTML = svg;
-				const svgElement = container.querySelector('svg');
-				if (svgElement) {
-					svgElement.style.maxWidth = '100%';
-					svgElement.style.height = 'auto';
-				}
+      try {
+        const { svg } = yield mermaid.render(
+          `${context.diagramId}-svg`,
+          context.content
+        );
 
-				context.isLoaded = true;
-				context.hasError = false;
-				context.showDiagram = true;
-			} catch (error) {
-				console.error('Mermaid rendering error:', error);
-				context.hasError = true;
-				context.errorMessage = error.message || 'Failed to render diagram';
-				context.isLoaded = false;
-				context.showDiagram = false;
-			}
-		}
-	}
+        container.innerHTML = svg;
+        const svgElement = container.querySelector("svg");
+        if (svgElement) {
+          svgElement.style.maxWidth = "100%";
+          svgElement.style.height = "auto";
+        }
+
+        context.isLoaded = true;
+        context.hasError = false;
+        context.showDiagram = true;
+      } catch (error) {
+        console.error("Mermaid rendering error:", error);
+        context.hasError = true;
+        context.errorMessage = error.message || "Failed to render diagram";
+        context.isLoaded = false;
+        context.showDiagram = false;
+      }
+    },
+  },
 });
