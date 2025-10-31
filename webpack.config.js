@@ -6,18 +6,16 @@ const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extrac
 const path = require( 'path' );
 
 module.exports = [
+	// Default WordPress build configuration
 	defaultConfigNonModule,
+	// WordPress module configuration
 	{
 		...defaultConfigModule,
-
-		// These lines are necessary to enable module compilation at time-of-writing:
-		output: {
-			module: true,
-			filename: '[name].js',
-			path: path.resolve( process.cwd(), 'build' ),
+		// Configure externals to use our local Mermaid module build
+		externals: {
+			'mermaid-library': 'mermaid-library',
 		},
-		experiments: { outputModule: true },
-
+		externalsType: 'module',
 		plugins: [
 			...defaultConfigModule.plugins.filter(
 				( plugin ) =>
@@ -28,10 +26,47 @@ module.exports = [
 				// With modules, use `requestToExternalModule`:
 				requestToExternalModule( request ) {
 					if ( request === 'mermaid-library' ) {
-						return request;
+						return 'mermaid-library';
 					}
 				},
 			} ),
 		],
+	},
+	// Separate build just for Mermaid as an ES module
+	{
+		entry: {
+			'mermaid-module': path.resolve( process.cwd(), 'src/mermaid-export.js' ),
+		},
+		output: {
+			path: path.resolve( process.cwd(), 'build' ),
+			filename: '[name].js',
+			library: {
+				type: 'module',
+			},
+			module: true,
+			chunkFormat: 'module',
+		},
+		experiments: {
+			outputModule: true,
+		},
+		optimization: {
+			// We want a single file output
+			splitChunks: false,
+			runtimeChunk: false,
+		},
+		module: {
+			rules: [
+				{
+					test: /\.m?js$/,
+					resolve: {
+						fullySpecified: false,
+					},
+				},
+			],
+		},
+		resolve: {
+			extensions: [ '.js', '.mjs', '.json' ],
+		},
+		plugins: [],
 	},
 ];

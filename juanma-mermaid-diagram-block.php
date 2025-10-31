@@ -26,12 +26,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return void
  */
 function mermaid_diagram_block_init(): void {
-	// Register Mermaid as an external script module
+
+	// Register local Mermaid ES module build
 	wp_register_script_module(
 		'mermaid-library',
-		'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs',
+		plugins_url( 'build/mermaid-module.js', __FILE__ ),
 		array(),
-		'10.6.1'
+		filemtime( plugin_dir_path( __FILE__ ) . 'build/mermaid-module.js' )
 	);
 
 	register_block_type( __DIR__ . '/build/' );
